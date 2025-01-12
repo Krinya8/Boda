@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klikker Játék</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Egységes betűtípus -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif; /* Egységes, egyszerű betűtípus */
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: url('istockphoto-977716906-612x612.jpg') no-repeat center center fixed;
+            background-size: cover; /* Háttér éles és arányos */
+        }
+        #clickable-container {
+            position: absolute;
+            top: 40%; /* Feljebb toltam az egész tartalmat */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #clickable {
+            width: 400px; /* Kép méretének csökkentése 400px-re */
+            height: auto; /* Megtartja az arányokat */
+            cursor: pointer;
+        }
+        #score {
+            margin-top: 15px;
+            font-size: 32px; /* Nagyobb betűméret */
+            font-weight: bold;
+            color: red; /* Piros szín */
+        }
+        #click-text {
+            margin-top: 10px;
+            font-size: 24px; /* Szöveg méret */
+            font-weight: bold;
+            color: yellow; /* Sárga szín */
+        }
+        #bang-bang, #pot-message, #special-message {
+            margin-top: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: red; /* Piros szín minden üzenethez */
+        }
+        #messages-table {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            font-size: 18px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+            width: 200px;
+            text-align: left;
+        }
+        #messages-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #messages-table td, #messages-table th {
+            padding: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div id="messages-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Üzenetek</th>
+                </tr>
+            </thead>
+            <tbody id="message-list">
+                <tr>
+                    <td>POT!</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="clickable-container">
+        <img src="boda.png" alt="Klikkelj ide!" id="clickable">
+        <div id="click-text">Klikkelj Bodára</div>
+        <div id="score">Pontszám: 0</div>
+        <div id="bang-bang">Bang bang!</div> <!-- Felkiáltójel hozzáadása -->
+        <div id="pot-message">POT!</div> <!-- Kezdeti POT! üzenet -->
+        <div id="special-message" style="display: none;">Speckós Fickó!</div> <!-- Speckós Fickó üzenet -->
+    </div>
+
+    <script>
+        let score = 0;
+        const scoreDisplay = document.getElementById('score');
+        const clickableImage = document.getElementById('clickable');
+        const bangBangText = document.getElementById('bang-bang');
+        const potMessage = document.getElementById('pot-message');
+        const specialMessage = document.getElementById('special-message');
+        const messageList = document.getElementById('message-list');
+
+        clickableImage.addEventListener('click', () => {
+            score++; // Pontszám növelése
+            scoreDisplay.textContent = `Pontszám: ${score}`; // Frissített pontszám megjelenítése
+
+            // Ha elérte az 5-öt, megjelenik a "Bang bang!" felirat
+            if (score % 5 === 0) {
+                bangBangText.style.display = 'block'; // "Bang bang!" megjelenítése
+            } else {
+                bangBangText.style.display = 'none'; // "Bang bang!" elrejtése
+            }
+
+            // Ha a pontszám elérte az 5-öt, a "POT!" eltűnik
+            if (score > 5) {
+                potMessage.style.display = 'none';
+            }
+
+            // Ha a pontszám elérte a 100-at, a "Speckós Fickó!" üzenet megjelenik
+            if (score === 100) {
+                specialMessage.style.display = 'block';
+                const newMessage = document.createElement('tr');
+                newMessage.innerHTML = '<td>Speckós Fickó!</td>';
+                messageList.appendChild(newMessage);
+            }
+
+            // Ha a pontszám elérte a 110-et, a "Speckós Fickó!" eltűnik
+            if (score > 110) {
+                specialMessage.style.display = 'none';
+            }
+
+            // Üzenetek nyomon követése a táblázatban
+            if (score === 5) {
+                const newMessage = document.createElement('tr');
+                newMessage.innerHTML = '<td>Bang bang!</td>';
+                messageList.appendChild(newMessage);
+            }
+        });
+    </script>
+</body>
+</html>
